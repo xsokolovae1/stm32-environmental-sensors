@@ -21,7 +21,9 @@
 #include "i2c.h"
 
 /* USER CODE BEGIN 0 */
-
+static uint8_t *i2c_rx_buffer = 0;
+static volatile uint8_t i2c_rx_index = 0;
+static uint8_t i2c_rx_length = 0;
 /* USER CODE END 0 */
 
 /* I2C1 init function */
