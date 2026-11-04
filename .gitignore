@@ -1,0 +1,6 @@
+   Debug/
+   Release/
+   .metadata/
+   EWARM/
+   *.launch
+   .settings/
