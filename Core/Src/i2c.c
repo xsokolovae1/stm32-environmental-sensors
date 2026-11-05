@@ -75,7 +75,26 @@ void MX_I2C1_Init(void)
   NVIC_EnableIRQ(I2C1_EV_IRQn);
 
   /* USER CODE BEGIN I2C1_Init 1 */
+  uint8_t i2c_master_read(uint8_t dev_addr, uint8_t reg, uint8_t *data, uint8_t len)
+  {
+  	i2c_rx_buffer = data;
+  	i2c_rx_index  = 0;
+  	i2c_rx_length = len;
 
+  	LL_I2C_HandleTransfer(I2C1, dev_addr, LL_I2C_ADDRSLAVE_7BIT, 1,
+  	                      LL_I2C_MODE_SOFTEND, LL_I2C_GENERATE_START_WRITE);
+  	if(!i2c_send_byte(reg)) return 0;
+  	while(!LL_I2C_IsActiveFlag_TC(I2C1));
+
+  	LL_I2C_EnableIT_RX(I2C1);
+  	LL_I2C_HandleTransfer(I2C1, dev_addr, LL_I2C_ADDRSLAVE_7BIT, len,
+  	                      LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
+  	while(!LL_I2C_IsActiveFlag_STOP(I2C1));
+
+  	LL_I2C_DisableIT_RX(I2C1);
+  	LL_I2C_ClearFlag_STOP(I2C1);
+  	return (i2c_rx_index == len);
+  }
   /* USER CODE END I2C1_Init 1 */
 
   /** I2C Initialization
