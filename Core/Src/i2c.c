@@ -24,6 +24,22 @@
 static uint8_t *i2c_rx_buffer = 0;
 static volatile uint8_t i2c_rx_index = 0;
 static uint8_t i2c_rx_length = 0;
+
+static uint8_t i2c_send_byte(uint8_t byte)
+{
+	while(!LL_I2C_IsActiveFlag_TXIS(I2C1))
+	{
+		if(LL_I2C_IsActiveFlag_NACK(I2C1))
+		{
+			while(!LL_I2C_IsActiveFlag_STOP(I2C1));
+			LL_I2C_ClearFlag_NACK(I2C1);
+			LL_I2C_ClearFlag_STOP(I2C1);
+			return 0;
+		}
+	}
+	LL_I2C_TransmitData8(I2C1, byte);
+	return 1;
+}
 /* USER CODE END 0 */
 
 /* I2C1 init function */
