@@ -95,6 +95,29 @@ void MX_I2C1_Init(void)
   	LL_I2C_ClearFlag_STOP(I2C1);
   	return (i2c_rx_index == len);
   }
+
+  uint8_t i2c_master_write(uint8_t dev_addr, uint8_t reg, uint8_t *data, uint8_t len)
+  {
+  	LL_I2C_HandleTransfer(I2C1, dev_addr, LL_I2C_ADDRSLAVE_7BIT, len + 1,
+  	                      LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
+  	if(!i2c_send_byte(reg)) return 0;
+  	for(uint8_t i = 0; i < len; i++)
+  		if(!i2c_send_byte(data[i])) return 0;
+
+  	while(!LL_I2C_IsActiveFlag_STOP(I2C1));
+  	LL_I2C_ClearFlag_STOP(I2C1);
+  	return 1;
+  }
+
+  void i2c_rx_callback(void)
+  {
+  	if(LL_I2C_IsActiveFlag_RXNE(I2C1))
+  	{
+  		uint8_t byte = LL_I2C_ReceiveData8(I2C1);
+  		if(i2c_rx_index < i2c_rx_length)
+  			i2c_rx_buffer[i2c_rx_index++] = byte;
+  	}
+  }
   /* USER CODE END I2C1_Init 1 */
 
   /** I2C Initialization
