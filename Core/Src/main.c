@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "hts221.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,9 +98,7 @@ int main(void)
   MX_I2C1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t who_hts = 0, who_lps = 0;
-  uint8_t ok_hts = i2c_master_read(0xBE, 0x0F, &who_hts, 1);
-  uint8_t ok_lps = i2c_master_read(0xBA, 0x0F, &who_lps, 1);
+  uint8_t hts_ok = hts221_init(i2c_master_read, i2c_master_write);
   // LPS22HB -> 0xB1
   /* USER CODE END 2 */
 
@@ -108,7 +106,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  float t = hts221_get_temperature();
+	  float h = hts221_get_humidity();
+	  LL_mDelay(1000);
     /* USER CODE END WHILE */
+
 
     /* USER CODE BEGIN 3 */
   }
