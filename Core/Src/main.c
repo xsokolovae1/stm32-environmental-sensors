@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "hts221.h"
 #include "lps22hb.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,7 +69,14 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
+	void usart2_send_string(const char *str)
+	{
+		while(*str)
+		{
+			while(!LL_USART_IsActiveFlag_TXE(USART2));
+			LL_USART_TransmitData8(USART2, *str++);
+		}
+	}
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -111,12 +119,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  float t = hts221_get_temperature();
-	  float h = hts221_get_humidity();
+	  usart2_send_string("hello VRS :)\r\n");
+	  float t   = hts221_get_temperature();
+	  float h   = hts221_get_humidity();
 	  float p   = lps22hb_get_pressure();
 	  float alt = lps22hb_get_altitude(p, p0);
-	  LL_mDelay(1000);
 
+	  char buf[64];
+	  sprintf(buf, "%04.1f,%02d,%07.2f,%05.2f\r\n", t, (int)(h + 0.5f), p, alt);
+	  usart2_send_string(buf);
+
+	  LL_mDelay(200);
     /* USER CODE END WHILE */
 
 
