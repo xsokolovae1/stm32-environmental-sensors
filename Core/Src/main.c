@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "hts221.h"
+#include "lps22hb.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,6 +101,10 @@ int main(void)
   /* USER CODE BEGIN 2 */
   uint8_t hts_ok = hts221_init(i2c_master_read, i2c_master_write);
   // LPS22HB -> 0xB1
+  uint8_t lps_ok = lps22hb_init(i2c_master_read, i2c_master_write);
+  float p0 = lps22hb_get_pressure();
+  LL_mDelay(200);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -108,7 +113,10 @@ int main(void)
   {
 	  float t = hts221_get_temperature();
 	  float h = hts221_get_humidity();
+	  float p   = lps22hb_get_pressure();
+	  float alt = lps22hb_get_altitude(p, p0);
 	  LL_mDelay(1000);
+
     /* USER CODE END WHILE */
 
 
