@@ -1,5 +1,0 @@
-../HTS221/hts221.c:17:16:hts221_read	24	static
-../HTS221/hts221.c:23:16:hts221_write	24	static
-../HTS221/hts221.c:30:9:hts221_init	40	static
-../HTS221/hts221.c:60:7:hts221_get_temperature	16	static
-../HTS221/hts221.c:70:7:hts221_get_humidity	16	static
