@@ -22,6 +22,7 @@
 #include "stm32f3xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "i2c.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -204,7 +205,7 @@ void SysTick_Handler(void)
 void I2C1_EV_IRQHandler(void)
 {
   /* USER CODE BEGIN I2C1_EV_IRQn 0 */
-
+	 i2c_rx_callback();
   /* USER CODE END I2C1_EV_IRQn 0 */
   /* USER CODE BEGIN I2C1_EV_IRQn 1 */
 

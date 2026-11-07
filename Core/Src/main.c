@@ -98,7 +98,10 @@ int main(void)
   MX_I2C1_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  uint8_t who_hts = 0, who_lps = 0;
+  uint8_t ok_hts = i2c_master_read(0xBE, 0x0F, &who_hts, 1);
+  uint8_t ok_lps = i2c_master_read(0xBA, 0x0F, &who_lps, 1);
+  // LPS22HB -> 0xB1
   /* USER CODE END 2 */
 
   /* Infinite loop */
